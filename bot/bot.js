@@ -13,8 +13,11 @@ const supportbot = require('./modules/supportbot.js');
 
 var aliases;
 try {
-  aliases = require('./alias.json');
+  aliases = require("./alias.json");
+  console.log("aliases")
+  console.log(aliases)
 } catch (e) {
+  console.log("No aliases defined")
   //No aliases defined
   aliases = {
     test: {
@@ -43,7 +46,18 @@ bot.on('ready', function() {
   console.log('Logged in! Serving in ' + bot.guilds.array().length + ' servers');
   require('./plugins.js').init();
   console.log('type ' + config.prefix + 'help in Discord for a commands list.');
-  bot.user.setGame(config.prefix + 'help');
+  bot.user.setActivity(config.prefix + "Intialized!");
+  var text = ["tip", "multitip", "roletip"];
+  var counter = 0;
+  setInterval(change, 10000);
+
+  function change() {
+    bot.user.setActivity(config.prefix + text[counter]);
+    counter++;
+    if (counter >= text.length) {
+      counter = 0;
+    }
+  }
 
   //initialize the claimbot (content bot)
   claimbot.init(bot);
@@ -76,7 +90,7 @@ function checkMessageForCommand(msg, isEdit) {
     }
     let alias = aliases[cmdTxt];
     if (alias) {
-      var cmd = alias;
+      var cmd =  commands[alias];
     } else {
       var cmd = commands[cmdTxt];
     }
